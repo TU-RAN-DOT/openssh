@@ -5,7 +5,7 @@ on:
     types: [published]
 jobs:
   build-scan-push:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
