@@ -16,7 +16,7 @@ jobs:
         id: metadata
         uses: docker/metadata-action@v4
         with:
-          images: ghcr.io/TU-RAN-DOT/openssh
+          images: ghcr.io/tu-ran-dot/openssh
       - name: Build image
         uses: docker/build-push-action@v4
         with:
@@ -25,7 +25,7 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           exit-code: "1"
-          image-ref: ${{ steps.metadata.outputs.tags.0 }}
+          image-ref: ghcr.io/tu-ran-dot/openssh
           severity: CRITICAL
       - name: Log in to the registry
         uses: docker/login-action@v2
