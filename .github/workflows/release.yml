@@ -23,6 +23,7 @@ jobs:
           tags: ${{ steps.metadata.outputs.tags }}
       - name: Scan image
         uses: aquasecurity/trivy-action
+        with:
           exit-code: "1"
           severity: CRITICAL
       - name: Log in to the registry
