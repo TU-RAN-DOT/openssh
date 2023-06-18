@@ -1,0 +1,38 @@
+---
+name: Release a new image version
+on:
+  release:
+    types: [published]
+jobs:
+  build-scan-push:
+    runs-on: self-hosted
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout
+      - name: Extract metadata
+        id: metadata
+        uses: docker/metadata-action
+        with:
+          images: ghcr.io/TU-RAN-DOT/openssh
+      - name: Build image
+        uses: docker/build-push-action
+        with:
+          tags: ${{ steps.metadata.outputs.tags }}
+      - name: Scan image
+        uses: aquasecurity/trivy-action
+          exit-code: 1
+          severity: CRITICAL
+      - name: Log in to the registry
+        uses: docker/login-action
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push image
+        uses: docker/build-push-action
+        with:
+          push: true
+          tags: ${{ steps.metadata.outputs.tags }}
